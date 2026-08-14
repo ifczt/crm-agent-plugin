@@ -1,0 +1,9 @@
+interface:
+  display_name: "ifczt CRM Assistant"
+  short_description: "Secure CRM workflows through the company CLI"
+  default_prompt: "Use $ifczt-crm to review my CRM priorities for today."
+  icon_small: "./assets/icon.svg"
+  icon_large: "./assets/logo.svg"
+  brand_color: "#2563EB"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,38 @@
+{
+  "name": "@ifczt/crm-cli",
+  "version": "1.0.0",
+  "description": "CLI and ChatGPT desktop skill for the ifczt CRM Agent",
+  "type": "module",
+  "bin": {
+    "crm-cli": "bin/crm-cli.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "skills",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "node --check bin/crm-cli.js && node --test",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "commander": "^14.0.3",
+    "open": "^11.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifczt/crm-agent-plugin.git"
+  },
+  "homepage": "https://agent.ifczt.com/crm-agent",
+  "bugs": {
+    "url": "https://github.com/ifczt/crm-agent-plugin/issues"
+  }
+}

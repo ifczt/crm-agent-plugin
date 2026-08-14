@@ -1,20 +1,15 @@
 [CmdletBinding()]
-param([switch]$SkipScheduledUpdate, [switch]$AllowUnsignedDevelopmentBuild)
+param([switch]$SkipScheduledUpdate)
 
 $ErrorActionPreference = "Stop"
-$signature = Get-AuthenticodeSignature -LiteralPath $PSCommandPath
-if ($signature.Status -ne "Valid" -and -not ($AllowUnsignedDevelopmentBuild -and $signature.Status -eq "NotSigned")) {
-    throw "Installer signature validation failed: $($signature.Status)"
-}
+$repositoryRoot = Split-Path -Parent $PSScriptRoot
 
-codex plugin marketplace add ifczt/crm-agent-plugin
-if ($LASTEXITCODE -ne 0) { throw "Unable to add the ifczt CRM marketplace" }
+npm install --global $repositoryRoot
+if ($LASTEXITCODE -ne 0) { throw "Unable to install @ifczt/crm-cli" }
 
-if (-not $SkipScheduledUpdate) {
-    $updateScript = Join-Path $PSScriptRoot "update.ps1"
-    $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy AllSigned -File `"$updateScript`""
-    $trigger = New-ScheduledTaskTrigger -Daily -At "03:30"
-    Register-ScheduledTask -TaskName "ifczt CRM Agent Update" -Action $action -Trigger $trigger -Description "Refresh the ifczt CRM Agent marketplace" -Force | Out-Null
-}
+$setupArgs = @("setup", "--format", "json")
+if ($SkipScheduledUpdate) { $setupArgs += "--skip-schedule" }
+& crm-cli @setupArgs
+if ($LASTEXITCODE -ne 0) { throw "Unable to configure the global CRM skill" }
 
-Write-Host "ifczt CRM Agent marketplace installed. Open ChatGPT or Codex and install the plugin."
+Write-Host "CRM CLI installed. Run 'crm-cli auth login', then restart ChatGPT desktop."
