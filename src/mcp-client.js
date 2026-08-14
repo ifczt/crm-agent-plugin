@@ -2,7 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-import { MCP_URL } from "./constants.js";
+import { MCP_URL, OAUTH_CALLBACK_URL } from "./constants.js";
 import { SecureOAuthProvider } from "./oauth-provider.js";
 
 export function parseToolResult(result) {
@@ -30,7 +30,7 @@ function authRequired(error, provider) {
 
 export async function connectMcp({ provider } = {}) {
   const oauthProvider = provider || new SecureOAuthProvider({
-    redirectUrl: "http://127.0.0.1:19732/callback",
+    redirectUrl: OAUTH_CALLBACK_URL,
     interactive: false,
   });
   const client = new Client({ name: "ifczt-crm-cli", version: "1.0.0" }, { capabilities: {} });

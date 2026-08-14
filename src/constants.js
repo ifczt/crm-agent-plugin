@@ -1,6 +1,7 @@
 export const MCP_URL = process.env.CRM_CLI_SERVER_URL || "https://agent.ifczt.com/mcp";
 export const PUBLIC_BASE_URL = new URL(MCP_URL).origin;
 export const OAUTH_SCOPES = ["crm.read", "crm.write", "reminders.manage"];
+export const OAUTH_CALLBACK_URL = "http://127.0.0.1:19732/callback";
 export const CREDENTIAL_TARGET = `ifczt-crm-cli:${MCP_URL}`;
 export const UPDATE_SOURCE = "git+https://github.com/ifczt/crm-agent-plugin.git#main";
 export const MANAGED_RULE_START = "<!-- ifczt-crm:start -->";

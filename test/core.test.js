@@ -9,11 +9,19 @@ import { doctorHealthy, parseJson } from "../src/cli.js";
 import { parseToolResult } from "../src/mcp-client.js";
 import { replaceManagedRule } from "../src/setup.js";
 import { compareVersions } from "../src/update-check.js";
+import { OAUTH_CALLBACK_URL } from "../src/constants.js";
+import { clientSupportsRedirect } from "../src/oauth-provider.js";
 
 test("version comparison handles semantic version components", () => {
   assert.equal(compareVersions("1.2.0", "1.1.9"), 1);
   assert.equal(compareVersions("1.0.0", "1.0.0"), 0);
   assert.equal(compareVersions("1.0.0", "1.0.1"), -1);
+});
+
+test("OAuth loopback callback is stable across login retries", () => {
+  assert.equal(OAUTH_CALLBACK_URL, "http://127.0.0.1:19732/callback");
+  assert.equal(clientSupportsRedirect({ redirect_uris: [OAUTH_CALLBACK_URL] }, OAUTH_CALLBACK_URL), true);
+  assert.equal(clientSupportsRedirect({ redirect_uris: ["http://127.0.0.1:54321/callback"] }, OAUTH_CALLBACK_URL), false);
 });
 
 test("managed global rule is appended and replaced without duplication", () => {

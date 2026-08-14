@@ -5,10 +5,11 @@ import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
 import { deleteCredentialRecord, loadCredentialRecord } from "./credential-store.js";
-import { MCP_URL, OAUTH_SCOPES } from "./constants.js";
+import { MCP_URL, OAUTH_CALLBACK_URL, OAUTH_SCOPES } from "./constants.js";
 import { SecureOAuthProvider } from "./oauth-provider.js";
 
 function startCallbackServer(timeoutMs = 5 * 60 * 1000) {
+  const callbackUrl = new URL(OAUTH_CALLBACK_URL);
   let resolveCode;
   let rejectCode;
   const codePromise = new Promise((resolve, reject) => {
@@ -39,7 +40,7 @@ function startCallbackServer(timeoutMs = 5 * 60 * 1000) {
 
   const ready = new Promise((resolve, reject) => {
     server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => resolve());
+    server.listen(Number(callbackUrl.port), callbackUrl.hostname, () => resolve());
   });
   const timer = setTimeout(() => rejectCode(new Error("authorization timed out")), timeoutMs);
 
@@ -48,9 +49,7 @@ function startCallbackServer(timeoutMs = 5 * 60 * 1000) {
     ready,
     codePromise: codePromise.finally(() => clearTimeout(timer)),
     get redirectUrl() {
-      const address = server.address();
-      if (!address || typeof address === "string") throw new Error("callback server is not ready");
-      return `http://127.0.0.1:${address.port}/callback`;
+      return callbackUrl.toString();
     },
     close() {
       clearTimeout(timer);

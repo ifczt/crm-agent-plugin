@@ -4,6 +4,11 @@ import open from "open";
 import { loadCredentialRecord, saveCredentialRecord } from "./credential-store.js";
 import { OAUTH_SCOPES } from "./constants.js";
 
+export function clientSupportsRedirect(clientInformation, redirectUrl) {
+  if (!clientInformation || !redirectUrl) return true;
+  return (clientInformation.redirect_uris || []).map(String).includes(String(redirectUrl));
+}
+
 export class SecureOAuthProvider {
   constructor({ redirectUrl, interactive = false } = {}) {
     this._redirectUrl = redirectUrl;
@@ -43,7 +48,10 @@ export class SecureOAuthProvider {
   }
 
   async clientInformation() {
-    return (await this._load()).clientInformation;
+    const clientInformation = (await this._load()).clientInformation;
+    return clientSupportsRedirect(clientInformation, this._redirectUrl)
+      ? clientInformation
+      : undefined;
   }
 
   async saveClientInformation(clientInformation) {

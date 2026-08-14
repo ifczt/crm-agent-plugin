@@ -1,6 +1,6 @@
 {
   "name": "@ifczt/crm-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI and ChatGPT desktop skill for the ifczt CRM Agent",
   "type": "module",
   "bin": {
