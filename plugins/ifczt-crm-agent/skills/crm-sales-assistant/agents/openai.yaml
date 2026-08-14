@@ -1,0 +1,13 @@
+interface:
+  display_name: "CRM Sales Assistant"
+  short_description: "Secure CRM sales workflows and WeCom reminders"
+  default_prompt: "Use $crm-sales-assistant to review my CRM priorities for today."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "ifczt-crm"
+      description: "Authenticated ifczt CRM sales and reminder tools"
+      transport: "streamable_http"
+      url: "https://agent.ifczt.com/mcp"
+policy:
+  allow_implicit_invocation: true

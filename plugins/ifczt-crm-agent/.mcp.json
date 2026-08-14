@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ifczt-crm": {
+      "type": "http",
+      "url": "https://agent.ifczt.com/mcp"
+    }
+  }
+}
