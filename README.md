@@ -8,7 +8,7 @@ When a user asks you to install this repository from ChatGPT desktop, perform th
 
 1. Confirm the repository URL is exactly `https://github.com/ifczt/crm-agent-plugin`.
 2. Check that Node.js 20 or later, npm, Git, and PowerShell are available.
-3. Run `npm install --global github:ifczt/crm-agent-plugin#main`.
+3. Run `npm install --global git+https://github.com/ifczt/crm-agent-plugin.git#main`.
 4. Run `crm-cli setup --format json`.
 5. Start `crm-cli auth login --format json` in the background. Show the authorization URL to the user and wait while they send the browser's one-time code to the company WeCom bot.
 6. Run `crm-cli doctor --format json`. Report success only when the service, authorization, and tool checks pass.
@@ -35,7 +35,7 @@ This flow is for a local Codex task in the ChatGPT desktop app. A hosted ChatGPT
 ## Manual installation
 
 ```powershell
-npm install --global github:ifczt/crm-agent-plugin#main
+npm install --global git+https://github.com/ifczt/crm-agent-plugin.git#main
 crm-cli setup --format pretty
 crm-cli auth login --format pretty
 crm-cli doctor --format pretty

@@ -32,7 +32,7 @@ export async function updateNotice() {
       current_version: current,
       latest_version: latest,
       message: `crm-cli ${latest} is available`,
-      command: "npm install --global github:ifczt/crm-agent-plugin#main && crm-cli setup",
+      command: "npm install --global git+https://github.com/ifczt/crm-agent-plugin.git#main && crm-cli setup",
     };
   } catch {
     return undefined;
