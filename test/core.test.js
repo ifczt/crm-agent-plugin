@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import crypto from "node:crypto";
+import { createServer } from "node:net";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -22,6 +23,32 @@ test("OAuth loopback callback is stable across login retries", () => {
   assert.equal(OAUTH_CALLBACK_URL, "http://127.0.0.1:19732/callback");
   assert.equal(clientSupportsRedirect({ redirect_uris: [OAUTH_CALLBACK_URL] }, OAUTH_CALLBACK_URL), true);
   assert.equal(clientSupportsRedirect({ redirect_uris: ["http://127.0.0.1:54321/callback"] }, OAUTH_CALLBACK_URL), false);
+});
+
+test("login exits promptly when the OAuth callback port is occupied", { timeout: 5000 }, async () => {
+  const blocker = createServer();
+  await new Promise((resolve, reject) => {
+    blocker.once("error", reject);
+    blocker.listen(19732, "127.0.0.1", resolve);
+  });
+  try {
+    const cli = fileURLToPath(new URL("../bin/crm-cli.js", import.meta.url));
+    const result = await new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, [cli, "auth", "login"], {
+        stdio: ["ignore", "pipe", "pipe"],
+        windowsHide: true,
+      });
+      let stderr = "";
+      child.stderr.setEncoding("utf8");
+      child.stderr.on("data", (chunk) => { stderr += chunk; });
+      child.once("error", reject);
+      child.once("close", (code) => resolve({ code, stderr }));
+    });
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, /EADDRINUSE|address already in use/);
+  } finally {
+    await new Promise((resolve) => blocker.close(resolve));
+  }
 });
 
 test("managed global rule is appended and replaced without duplication", () => {

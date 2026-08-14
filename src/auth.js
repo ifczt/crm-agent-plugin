@@ -68,10 +68,10 @@ async function connectWithProvider(provider) {
 export async function login({ force = false } = {}) {
   if (force) await deleteCredentialRecord();
   const callback = startCallbackServer();
-  await callback.ready;
-  const provider = new SecureOAuthProvider({ redirectUrl: callback.redirectUrl, interactive: true });
   let firstTransport;
   try {
+    await callback.ready;
+    const provider = new SecureOAuthProvider({ redirectUrl: callback.redirectUrl, interactive: true });
     try {
       const connected = await connectWithProvider(provider);
       firstTransport = connected.transport;
