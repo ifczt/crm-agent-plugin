@@ -58,7 +58,16 @@ async function doctor() {
   } else {
     checks.tools = { ok: false, skipped: true, reason: "authorization required" };
   }
-  return { healthy: checks.service.ok && checks.auth.ok && (!checks.auth.authenticated || checks.tools.ok), checks };
+  return { healthy: doctorHealthy(checks), checks };
+}
+
+export function doctorHealthy(checks) {
+  return Boolean(
+    checks.service?.ok
+    && checks.auth?.ok
+    && checks.auth?.authenticated
+    && checks.tools?.ok,
+  );
 }
 
 export async function buildProgram() {

@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { parseJson } from "../src/cli.js";
+import { doctorHealthy, parseJson } from "../src/cli.js";
 import { parseToolResult } from "../src/mcp-client.js";
 import { replaceManagedRule } from "../src/setup.js";
 import { compareVersions } from "../src/update-check.js";
@@ -40,6 +40,19 @@ test("MCP text results are decoded as structured JSON", () => {
     { status: "preview" },
   );
   assert.equal(parseToolResult({ content: [{ type: "text", text: "plain" }] }), "plain");
+});
+
+test("doctor requires an authenticated tool connection", () => {
+  assert.equal(doctorHealthy({
+    service: { ok: true },
+    auth: { ok: true, authenticated: false },
+    tools: { ok: false, skipped: true },
+  }), false);
+  assert.equal(doctorHealthy({
+    service: { ok: true },
+    auth: { ok: true, authenticated: true },
+    tools: { ok: true },
+  }), true);
 });
 
 test("Windows credential helper round trips and deletes an isolated record", { skip: process.platform !== "win32" }, () => {
