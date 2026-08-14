@@ -10,7 +10,7 @@ import { doctorHealthy, parseJson } from "../src/cli.js";
 import { parseToolResult } from "../src/mcp-client.js";
 import { replaceManagedRule } from "../src/setup.js";
 import { compareVersions } from "../src/update-check.js";
-import { OAUTH_CALLBACK_URL } from "../src/constants.js";
+import { OAUTH_CALLBACK_URL, UPDATE_SOURCE } from "../src/constants.js";
 import { clientSupportsRedirect } from "../src/oauth-provider.js";
 
 test("version comparison handles semantic version components", () => {
@@ -23,6 +23,13 @@ test("OAuth loopback callback is stable across login retries", () => {
   assert.equal(OAUTH_CALLBACK_URL, "http://127.0.0.1:19732/callback");
   assert.equal(clientSupportsRedirect({ redirect_uris: [OAUTH_CALLBACK_URL] }, OAUTH_CALLBACK_URL), true);
   assert.equal(clientSupportsRedirect({ redirect_uris: ["http://127.0.0.1:54321/callback"] }, OAUTH_CALLBACK_URL), false);
+});
+
+test("updates use the anonymous GitHub archive instead of Git transport", () => {
+  assert.equal(
+    UPDATE_SOURCE,
+    "https://github.com/ifczt/crm-agent-plugin/archive/refs/heads/main.tar.gz",
+  );
 });
 
 test("login exits promptly when the OAuth callback port is occupied", { timeout: 5000 }, async () => {

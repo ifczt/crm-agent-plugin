@@ -1,6 +1,8 @@
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
+import { UPDATE_SOURCE } from "./constants.js";
+
 const packagePath = fileURLToPath(new URL("../package.json", import.meta.url));
 const manifestUrl = "https://raw.githubusercontent.com/ifczt/crm-agent-plugin/main/package.json";
 
@@ -32,7 +34,7 @@ export async function updateNotice() {
       current_version: current,
       latest_version: latest,
       message: `crm-cli ${latest} is available`,
-      command: "npm install --global git+https://github.com/ifczt/crm-agent-plugin.git#main && crm-cli setup",
+      command: `npm install --global ${UPDATE_SOURCE}; crm-cli setup`,
     };
   } catch {
     return undefined;
