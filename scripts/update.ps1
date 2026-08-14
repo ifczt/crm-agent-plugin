@@ -6,7 +6,7 @@ $logDirectory = Split-Path -Parent $LogPath
 New-Item -ItemType Directory -Path $logDirectory -Force | Out-Null
 
 try {
-    npm install --global https://github.com/ifczt/crm-agent-plugin/archive/refs/heads/main.tar.gz 2>&1 |
+    npm install --global https://agent.ifczt.com/downloads/crm-cli-latest.tgz 2>&1 |
         Tee-Object -FilePath $LogPath -Append
     if ($LASTEXITCODE -ne 0) { throw "npm install exited with $LASTEXITCODE" }
 

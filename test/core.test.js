@@ -25,10 +25,10 @@ test("OAuth loopback callback is stable across login retries", () => {
   assert.equal(clientSupportsRedirect({ redirect_uris: ["http://127.0.0.1:54321/callback"] }, OAUTH_CALLBACK_URL), false);
 });
 
-test("updates use the anonymous GitHub archive instead of Git transport", () => {
+test("updates use the public HTTPS package mirror instead of Git transport", () => {
   assert.equal(
     UPDATE_SOURCE,
-    "https://github.com/ifczt/crm-agent-plugin/archive/refs/heads/main.tar.gz",
+    "https://agent.ifczt.com/downloads/crm-cli-latest.tgz",
   );
 });
 

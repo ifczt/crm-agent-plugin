@@ -8,7 +8,7 @@ When a user asks you to install this repository from ChatGPT desktop, perform th
 
 1. Confirm the repository URL is exactly `https://github.com/ifczt/crm-agent-plugin`.
 2. Check that Node.js 20 or later, npm, and PowerShell are available.
-3. Run `npm install --global https://github.com/ifczt/crm-agent-plugin/archive/refs/heads/main.tar.gz`.
+3. Run `npm install --global https://agent.ifczt.com/downloads/crm-cli-latest.tgz`.
 4. Run `crm-cli setup --format json`.
 5. Start `crm-cli auth login --format json` in the background. Show the authorization URL to the user and wait while they send the browser's one-time code to the company WeCom bot.
 6. Run `crm-cli doctor --format json`. Report success only when the service, authorization, and tool checks pass.
@@ -35,7 +35,7 @@ This flow is for a local Codex task in the ChatGPT desktop app. A hosted ChatGPT
 ## Manual installation
 
 ```powershell
-npm install --global https://github.com/ifczt/crm-agent-plugin/archive/refs/heads/main.tar.gz
+npm install --global https://agent.ifczt.com/downloads/crm-cli-latest.tgz
 crm-cli setup --format pretty
 crm-cli auth login --format pretty
 crm-cli doctor --format pretty
@@ -65,7 +65,7 @@ After the user explicitly confirms, repeat the same business arguments with the 
 
 The CLI is a client of `https://agent.ifczt.com/mcp`. The server remains responsible for OAuth, employee status, CRM button permissions, `SELF`/`DEPARTMENT`/`ALL` data scope, mutation confirmation, idempotency, and audit logging.
 
-The daily updater installs the latest `main` package and refreshes the global skill. Failed updates retain the previously installed npm package and write a log to `%LOCALAPPDATA%\ifczt-crm-cli\update.log`. CLI output can also include `_notice.update` when a newer version is available.
+The daily updater installs the latest package from the public `agent.ifczt.com` HTTPS mirror and refreshes the global skill. Source remains publicly auditable in this GitHub repository. Failed updates retain the previously installed npm package and write a log to `%LOCALAPPDATA%\ifczt-crm-cli\update.log`. CLI output can also include `_notice.update` when a newer version is available.
 
 ## Development
 
